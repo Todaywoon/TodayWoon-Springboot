@@ -6,6 +6,7 @@ import com.todaycloud.todaycloud.common.response.ResponseDto;
 import com.todaycloud.todaycloud.feed.service.FeedReadService;
 import com.todaycloud.todaycloud.feed.service.dto.FeedDto;
 import com.todaycloud.todaycloud.feed.service.dto.FeedsDto;
+import com.todaycloud.todaycloud.feed.service.dto.MyPageInfoDto;
 import com.todaycloud.todaycloud.user.service.UserService;
 import com.todaycloud.todaycloud.user.service.dto.UserDto;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -69,6 +70,20 @@ public class FeedReadController {
 
         return ResponseEntity.ok().body(new ResponseDto<>(feedReadService.findMyFeeds(userdto)));
     }
+
+
+
+    @Parameters({
+            @Parameter(name="userId", in = ParameterIn.HEADER),
+            @Parameter(name="password", in = ParameterIn.HEADER)
+    })
+    @GetMapping("/userinfo")
+    public ResponseEntity<ResponseDto<MyPageInfoDto>> myPageInfo(@RequestHeader(name = "userId") String userId, @RequestHeader(name = "password") String password) {
+        UserDto userdto = userService.login(userId, password);
+
+        return ResponseEntity.ok().body(new ResponseDto<>(feedReadService.getMyPageInfoThisMonth(userdto)));
+    }
+
 
 
 }

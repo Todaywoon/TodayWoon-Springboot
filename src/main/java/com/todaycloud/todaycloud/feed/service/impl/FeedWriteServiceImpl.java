@@ -114,5 +114,9 @@ public class FeedWriteServiceImpl implements FeedWriteService {
         if (startTime.isAfter(finishTime)) {
             throw new ResponseException(ErrorCode.INVALID_FORMAT);
         }
+
+        if (Duration.between(startTime, finishTime).toHours() >= 24) {
+            throw new ResponseException(ErrorCode.INVALID_FORMAT);
+        }
     }
 }
