@@ -38,7 +38,7 @@ public class FeedCreateController {
             @Parameter(name="userId", in = ParameterIn.HEADER),
             @Parameter(name="password", in = ParameterIn.HEADER)
     })
-    @PostMapping(name = "/feed", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(path = "/feed", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ResponseDto<Long>> createFeed(@RequestHeader(name = "userId") String userId, @RequestHeader(name = "password") String password,
                                                         @RequestPart(name = "image") MultipartFile file,
                                                         @RequestPart(name = "body") CreateFeedRequestDto requestBody) {

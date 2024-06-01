@@ -27,8 +27,6 @@ public class PictureCreateServiceImpl implements PictureCreateService {
             throw new ResponseException(ErrorCode.INVALID_FORMAT);
         }
 
-        System.out.println(picture.getOriginalFilename());
-
         String extension = getExtension(picture);
 
         UUID uuid = UUID.randomUUID();
