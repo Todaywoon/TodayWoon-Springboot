@@ -22,6 +22,7 @@ import java.time.format.DateTimeFormatter;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class FeedWriteController {
 
     private final FeedWriteService feedWriteService;
