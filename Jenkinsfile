@@ -21,6 +21,7 @@ pipeline {
             steps {
                 script {
                     // Docker 이미지 빌드 및 컨테이너 실행
+                    sh './gradlew build -x test'
                     sh 'docker build -t hangahanga-app .'
                     sh "docker run -p 8081:8080 -d --name $CONTAINER_NAME hangahanga-app"
                 }
