@@ -42,4 +42,13 @@ public class Feed {
     @JoinColumn(name="pictureId")
     private Picture picture;
 
+
+    public void incrementLikeCount() {
+        this.likeCount += 1;
+    }
+
+    public void decrementLikeCount() {
+        this.likeCount -= 1;
+    }
+
 }

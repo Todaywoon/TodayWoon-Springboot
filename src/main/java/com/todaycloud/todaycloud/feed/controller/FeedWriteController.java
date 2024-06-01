@@ -5,32 +5,27 @@ import com.todaycloud.todaycloud.common.exception.ErrorCode;
 import com.todaycloud.todaycloud.common.exception.ResponseException;
 import com.todaycloud.todaycloud.common.response.ResponseDto;
 import com.todaycloud.todaycloud.feed.controller.dto.CreateFeedRequestDto;
-import com.todaycloud.todaycloud.feed.domain.FeedWriteRepository;
-import com.todaycloud.todaycloud.feed.service.FeedCreateService;
-import com.todaycloud.todaycloud.feed.service.PictureCreateService;
+import com.todaycloud.todaycloud.feed.service.FeedWriteService;
+import com.todaycloud.todaycloud.user.service.UserService;
+import com.todaycloud.todaycloud.user.service.dto.UserDto;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.logging.SimpleFormatter;
-
-import static com.fasterxml.jackson.databind.type.LogicalType.DateTime;
 
 @RestController
 @RequiredArgsConstructor
-public class FeedCreateController {
+public class FeedWriteController {
 
-    private final FeedCreateService feedCreateService;
+    private final FeedWriteService feedWriteService;
+    private final UserService userService;
     private final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
 
@@ -52,17 +47,45 @@ public class FeedCreateController {
             throw new ResponseException(ErrorCode.INVALID_FORMAT);
         }
 
-        Long feedId = feedCreateService.createFeed(userId, password, startTime, finishTime, file);
+        Long feedId = feedWriteService.createFeed(userId, password, startTime, finishTime, file);
 
         return ResponseEntity.ok().body(new ResponseDto<>(feedId));
     }
 
 
 
-    private void assertValidBody(CreateFeedRequestDto request) {
-        if (request.finishTime() == null || request.startTime() == null) {
-            throw new ResponseException(ErrorCode.INVALID_FORMAT);
-        }
+    @Parameters({
+            @Parameter(name="userId", in = ParameterIn.HEADER),
+            @Parameter(name="password", in = ParameterIn.HEADER)
+    })
+    @GetMapping(path = "/like")
+    public ResponseEntity<ResponseDto<Boolean>> likeFeed(@RequestHeader(name = "userId") String userId, @RequestHeader(name = "password") String password,
+                                                        @RequestParam(name="feed_id") Long feed_id) {
+
+        UserDto userDto = userService.login(userId, password);
+
+
+        feedWriteService.likeFeed(userDto, feed_id);
+
+        return ResponseEntity.ok().body(new ResponseDto<>(true));
+    }
+
+
+
+    @Parameters({
+            @Parameter(name="userId", in = ParameterIn.HEADER),
+            @Parameter(name="password", in = ParameterIn.HEADER)
+    })
+    @DeleteMapping(path = "/like")
+    public ResponseEntity<ResponseDto<Boolean>> deleteLikeFeed(@RequestHeader(name = "userId") String userId, @RequestHeader(name = "password") String password,
+                                                         @RequestParam(name="feed_id") Long feed_id) {
+
+        UserDto userDto = userService.login(userId, password);
+
+
+        feedWriteService.deleteLikeFeed(userDto, feed_id);
+
+        return ResponseEntity.ok().body(new ResponseDto<>(true));
     }
 
 }

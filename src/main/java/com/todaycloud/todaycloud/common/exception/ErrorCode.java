@@ -13,7 +13,8 @@ public enum ErrorCode {
     NON_LOGIN(4, "유저 아이디, 비밀번호가 올바르지 않습니다."),
     INVALID_TIME(5, "시작 시간, 종료 시간이 올바르지 않습니다."),
     OVER_FILE_SIZE(6, "파일 크기가 너무 큽니다!"),
-    NOT_EXIST_FEED(7,"존재하지 않는 피드 입니다.");
+    NOT_EXIST_FEED(7,"존재하지 않는 피드 입니다."),
+    NOT_EXIST_LIKE(8, "해당 피드에 좋아요를 누른 적이 없습니다.");
 
 
     private final int errorCode;
