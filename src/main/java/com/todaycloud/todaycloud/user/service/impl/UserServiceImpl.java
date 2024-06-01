@@ -18,6 +18,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto register(String userId, String password) {
+        assertValidUserIdAndPassword(userId, password);
+
         userRepository.findByUserId(userId)
                 .ifPresent(user -> {throw new ResponseException(ErrorCode.DUPLICATE_USER);});
 
@@ -33,6 +35,8 @@ public class UserServiceImpl implements UserService {
     //다른 서비스에서 이를 이용해서 유저 로그인 성공 여부 가져올 수 있음
     @Override
     public UserDto login(String userId, String password) {
+        assertValidUserIdAndPassword(userId, password);
+
         User user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new ResponseException(ErrorCode.MISMATCH_USER_INFO));
 
@@ -41,5 +45,11 @@ public class UserServiceImpl implements UserService {
         }
 
         return new UserDto(user);
+    }
+
+    private void assertValidUserIdAndPassword(String userId, String password) {
+        if (userId == null || password == null) {
+            throw new ResponseException(ErrorCode.INVALID_FORMAT);
+        }
     }
 }
