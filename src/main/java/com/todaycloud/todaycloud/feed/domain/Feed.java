@@ -38,8 +38,8 @@ public class Feed {
     @JoinColumn(name="userId")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name="pictureId")
-    private Picture pictureId;
+    private Picture picture;
 
 }
