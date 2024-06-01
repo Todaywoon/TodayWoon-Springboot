@@ -47,6 +47,13 @@ public class UserServiceImpl implements UserService {
         return new UserDto(user);
     }
 
+    //다른 서비스에서 호출 용도....
+    @Override
+    public User findUser(UserDto userDto) {
+        return userRepository.findByUserId(userDto.userId())
+                .orElseThrow(() -> new ResponseException(ErrorCode.MISMATCH_USER_INFO));
+    }
+
     private void assertValidUserIdAndPassword(String userId, String password) {
         if (userId == null || password == null) {
             throw new ResponseException(ErrorCode.INVALID_FORMAT);
