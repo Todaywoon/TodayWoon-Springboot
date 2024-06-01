@@ -28,7 +28,7 @@ public class PictureController {
 
     private final UserService userService;
     private final PictureService pictureService;
-    public static final String IMAGE_URL = "http://localhost:8080/image";
+    public static final String IMAGE_URL = "http://34.64.187.145:8080/image";
 
     @Parameters({
             @Parameter(name="userId", in = ParameterIn.HEADER),
