@@ -14,4 +14,4 @@ ARG JAR_FILE_PATH=build/libs/*.jar
 COPY ${JAR_FILE_PATH} app.jar
 
 # 애플리케이션 실행
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["sudo","java","--Duser.timezone=Asia/Seoul", "-jar","app.jar"]

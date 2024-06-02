@@ -18,14 +18,26 @@ pipeline {
                 // 브랜치별로 실행 조건을 지정
                 expression { BRANCH_NAME == 'main' }
             }
-            steps {
-                script {
-                    // Docker 이미지 빌드 및 컨테이너 실행
-                    sh './gradlew build -x test'
-                    sh 'docker build -t hangahanga-app .'
-                    sh "docker run -p 8081:8080 -d --name $CONTAINER_NAME hangahanga-app"
-                }
-            }
+             stage("Build image") {
+                        steps {
+                            script {
+                                myapp = docker.build("choiaerim/hangahanga:${env.BUILD_ID}")
+                            }
+                        }
+                    }
+                    stage("Push image") {
+                        steps {
+                            script {
+                                docker.withRegistry('https://registry.hub.docker.com', 'hangahanga') {
+                                        myapp.push("latest")
+                                        myapp.push("${env.BUILD_ID}")
+                                }
+                            }
+                        }
+                    }
+//                     stage('Deploy') {
+//
+//                     }
         }
     }
 
