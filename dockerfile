@@ -7,7 +7,7 @@ WORKDIR /app
 COPY . .
 
 # Gradle 빌드 수행
-# RUN ./gradlew build -x test
+RUN ./gradlew build -x test
 
 # JAR 파일 복사
 ARG JAR_FILE_PATH=build/libs/*.jar
