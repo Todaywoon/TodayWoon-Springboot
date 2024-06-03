@@ -11,6 +11,16 @@ pipeline {
                     checkout scm
                 }
             }
+            stage("Build App"){
+                steps{
+                    script{
+                        echo 'Bulid Gradle'
+                        dir('.'){
+                            sh './gradlew clean build'
+                        }
+                    }
+                }
+            }
             stage("Build image") {
                 steps {
                     script {

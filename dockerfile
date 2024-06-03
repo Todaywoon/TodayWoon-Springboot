@@ -1,17 +1,14 @@
+# 베이스 이미지 설정 (여기서는 OpenJDK 17 사용)
 FROM openjdk:17-jdk-slim
 
 # 작업 디렉토리 설정
 WORKDIR /app
 
-# 소스 코드 복사
-COPY . .
+# 호스트의 JAR 파일을 컨테이너로 복사
+COPY build/libs/*.jar app.jar
 
-# Gradle 빌드 수행
-RUN ./gradlew build -x test
+# 포트 설정 (Spring Boot 애플리케이션이 사용하는 포트에 맞게 수정)
+EXPOSE 8080
 
-# JAR 파일 복사
-ARG JAR_FILE_PATH=build/libs/*.jar
-COPY ${JAR_FILE_PATH} app.jar
-
-# 애플리케이션 실행
-ENTRYPOINT ["sudo","java","--Duser.timezone=Asia/Seoul", "-jar","app.jar"]
+# 컨테이너 실행시 실행할 명령어 설정
+CMD ["java", "-jar", "app.jar"]
