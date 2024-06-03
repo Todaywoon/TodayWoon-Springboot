@@ -18,26 +18,23 @@ pipeline {
                 // 브랜치별로 실행 조건을 지정
                 expression { BRANCH_NAME == 'main' }
             }
-             stage("Build image") {
-                        steps {
-                            script {
-                                myapp = docker.build("choiaerim/hangahanga:${env.BUILD_ID}")
-                            }
-                        }
+        }
+        stage("Build image") {
+            steps {
+                script {
+                    myapp = docker.build("choiaerim/hangahanga:${env.BUILD_ID}")
+                }
+            }
+        }
+        stage("Push image") {
+            steps {
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', 'hangahanga') {
+                            myapp.push("latest")
+                            myapp.push("${env.BUILD_ID}")
                     }
-                    stage("Push image") {
-                        steps {
-                            script {
-                                docker.withRegistry('https://registry.hub.docker.com', 'hangahanga') {
-                                        myapp.push("latest")
-                                        myapp.push("${env.BUILD_ID}")
-                                }
-                            }
-                        }
-                    }
-//                     stage('Deploy') {
-//
-//                     }
+                }
+            }
         }
     }
 
